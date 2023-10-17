@@ -7,8 +7,51 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        #menu-container {
+            position: fixed;
+            background-color: #ccc; /* Màu xám */
+            width: 20%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Cho phép menu cuộn khi nội dung dài hơn */
+        }
+
+        #content {
+            width: 80%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-left: 20%; /* Tạo khoảng cách giữa menu và nội dung chính */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+            padding: 10px; /* Thêm đệm để tạo khoảng cách giữa các mục menu */
+            background-color: #f2f2f2; /* Màu nền của mục menu */
+            border-radius: 5px; /* Bo tròn góc của mục menu */
+            cursor: pointer; /* Biến con trỏ thành bàn tay khi di chuột qua */
+            transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+        }
+
+        li:hover {
+            background-color: #ddd; /* Màu nền khi di chuột qua */
+        }
                 /* Style for the table */
         table {
             border-collapse: collapse;
@@ -70,11 +113,55 @@
             background-color: #5cb85c;
             color: #fff;
         }
+        #header {
+            display: flex;
+            align-items: center; /* Căn giữa theo chiều dọc */
+            justify-content: space-between; /* Căn cách hai phần tử */
+        }
+        #account{
+            display: flex;
+            margin: 15px;
+            cursor: pointer; /* Biến con trỏ thành bàn tay khi di chuột qua */
+            transition: background-color 0.3s;
+        }
+        
 
     </style>
 </head>
 <body>
-    <table>
+    <div id="menu-container">
+        <h2 style="color : white; text-align: center">FPT</h2>
+        <hr>
+        <p style='text-align: center'>Lecture's displayName</p>
+        <hr>
+           
+        <ul>
+            <li>Home</li>
+            <br>
+            <li>Weekly timetable</li>
+            <br>
+            <li>Class management</li>
+            <br>
+            <li>Mail</li>
+            <br>
+            <li>Settings</li>
+            <br>
+            <li>Others</li>
+            <!-- Thêm các mục menu khác tại đây -->
+        </ul>
+    </div>
+    <div id="content">
+        <div id="header">
+            <h2>Class management</h2>
+            <div id="account">
+                <img style="border-radius: 50%" width="100px" src="../img/333656871_922232512296780_115887774450775164_n.jpg">
+                <p>Account's name</p>
+            </div>
+        </div>
+        
+        <hr>
+        <h2> Take attendance </h2>
+        <table>
         <thead>
             <tr>
                 <th rowspan="2">
@@ -108,12 +195,10 @@
                     <td>Slot 1 </td>
                     <td>
                         <a href="">SE1763</a>
-                       
-                        <p>
-                            PRJ301
-                            at- DE202
-                        </p>
-                        
+                        <br>
+                        <a>PRJ301</a>
+                        <br>
+                        <a>at- DE202</a>
                         
                         
                     </td>
@@ -178,5 +263,6 @@
                     
             </tbody>
     </table>
+    </div>
 </body>
 </html>
