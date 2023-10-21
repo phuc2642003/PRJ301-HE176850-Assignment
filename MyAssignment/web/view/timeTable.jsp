@@ -3,7 +3,7 @@
     Created on : Oct 11, 2023, 12:24:52 PM
     Author     : phuc2
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -182,11 +182,30 @@
 
                 </select>
                 </th>
-                <th align="center">Mon</th><th align="center">Tue</th><th align="center">Wed</th><th align="center">Thu</th><th align="center">Fri</th><th align="center">Sat</th><th align="center">Sun</th>
+                <th align="center">Mon</th>
+                <th align="center">Tue</th>
+                <th align="center">Wed</th>
+                <th align="center">Thu</th>
+                <th align="center">Fri</th>
+                <th align="center">Sat</th>
+                <th align="center">Sun</th>
             </tr>
         
             <tr>
-                <th align="center">02/10</th><th align="center">03/10</th><th align="center">04/10</th><th align="center">05/10</th><th align="center">06/10</th><th align="center">07/10</th><th align="center">08/10</th>
+                <c:forEach items="${requestScope.dates}" var="d">
+                    <th align="center">
+                        ${d}
+                    </th>
+                </c:forEach>
+                    
+                
+                <th align="center">02/10</th>
+                <th align="center">03/10</th>
+                <th align="center">04/10</th>
+                <th align="center">05/10</th>
+                <th align="center">06/10</th>
+                <th align="center">07/10</th>
+                <th align="center">08/10</th>
             </tr>
         </thead>
             <tbody>
