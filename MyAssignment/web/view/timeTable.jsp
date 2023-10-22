@@ -166,7 +166,7 @@
             <tr>
                 <th rowspan="2">
                     <span class="auto-style1"><strong>Year</strong></span>
-                    <select name="ctl00$mainContent$drpYear" onchange="javascript:setTimeout('__doPostBack(\'ctl00$mainContent$drpYear\',\'\')', 0)" id="ctl00_mainContent_drpYear">
+                    <select>
                         <option value="2020">2020</option>
                         <option value="2021">2021</option>
                         <option value="2022">2022</option>
@@ -175,7 +175,7 @@
                     </select>
                 <br>
                 Week
-                <select name="ctl00$mainContent$drpSelectWeek" onchange="javascript:setTimeout('__doPostBack(\'ctl00$mainContent$drpSelectWeek\',\'\')', 0)" id="ctl00_mainContent_drpSelectWeek">
+                <select>
 
                     <option selected="selected" value="40">02/10 To 08/10</option>
                     <option value="41">09/10 To 15/10</option>
@@ -199,85 +199,26 @@
                 </c:forEach>
                     
                 
-                <th align="center">02/10</th>
-                <th align="center">03/10</th>
-                <th align="center">04/10</th>
-                <th align="center">05/10</th>
-                <th align="center">06/10</th>
-                <th align="center">07/10</th>
-                <th align="center">08/10</th>
             </tr>
         </thead>
             <tbody>
                 
+                <c:forEach items="${requestScope.slots}" var="s" varStatus="loop">
                 <tr>
-                    <td>Slot 1 </td>
-                    <td>
-                        <a href="">SE1763</a>
-                        <br>
-                        <a>PRJ301</a>
-                        <br>
-                        <a>at- DE202</a>
-                        
-                        
-                    </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td>Slot ${s.id}<br>${s.description}</td>
+                    <c:forEach items="${requestScope.dates}" var="d">
+                        <td>
+                            <c:forEach items="${requestScope.sessions}" var="k">
+                                <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
+                                    <a href="att?id=${k.id}">
+                                        ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
+                                    </a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
                 </tr>
-                <tr>
-                    <td>Slot 2 </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Slot 3 </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Slot 4 </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Slot 5 </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Slot 6 </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
+            </c:forEach>
                     
                     
             </tbody>
