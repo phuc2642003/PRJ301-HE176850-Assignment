@@ -154,7 +154,7 @@
         <div id="header">
             <h2>Class management</h2>
             <div id="account">
-                <img style="border-radius: 50%" width="100px" src="../img/333656871_922232512296780_115887774450775164_n.jpg">
+                <img style="border-radius: 50%" width="100px" src="img/333656871_922232512296780_115887774450775164_n.jpg">
                 <p>Account's name</p>
             </div>
         </div>

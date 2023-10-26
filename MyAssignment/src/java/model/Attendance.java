@@ -4,7 +4,8 @@
  */
 package model;
 
-import java.sql.Time;
+import java.util.Date;
+
 /**
  *
  * @author phuc2
@@ -14,12 +15,12 @@ public class Attendance implements IBaseModel{
     private Student student;
     private boolean status;
     private String description;
-    private Time time;
+    private Date time;
 
     public Attendance() {
     }
 
-    public Attendance(Session session, Student student, boolean status, String description, Time time) {
+    public Attendance(Session session, Student student, boolean status, String description, Date time) {
         this.session = session;
         this.student = student;
         this.status = status;
@@ -59,11 +60,11 @@ public class Attendance implements IBaseModel{
         this.description = description;
     }
 
-    public Time getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

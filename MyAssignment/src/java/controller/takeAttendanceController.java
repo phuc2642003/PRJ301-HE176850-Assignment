@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dal.AttendanceDBContext;
+import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import model.Attendance;
+import model.Session;
+import model.Student;
 
 /**
  *
@@ -46,7 +52,16 @@ public class takeAttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        SessionDBContext db = new SessionDBContext();
+        int id = Integer.parseInt(request.getParameter("id"));
+        Session ses = db.getSessionByID(id);
+        request.setAttribute("ses",ses);
+        
+        AttendanceDBContext attDb = new AttendanceDBContext();
+        ArrayList<Attendance> atts = attDb.getAttendanceBySession(id);
+        
+        request.setAttribute("atts", atts);
+        request.getRequestDispatcher("view/takeAttendance.jsp").forward(request, response);
     }
 
     /**
@@ -60,7 +75,22 @@ public class takeAttendanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        Session ses = new Session();
+        ses.setId(Integer.parseInt(request.getParameter("sesid")));
+        String[] stuids = request.getParameterValues("stuid");
+        for (String stuid : stuids) {
+            Attendance a = new Attendance();
+            a.setSession(ses);
+            Student s = new Student();
+            s.setId(Integer.parseInt(stuid));
+            a.setStudent(s);
+            a.setStatus(request.getParameter("status"+stuid).equals("present"));
+            a.setDescription(request.getParameter("description"+stuid));
+            ses.getAtts().add(a);
+        }
+        SessionDBContext sesDB = new SessionDBContext();
+        sesDB.addAttendences(ses);
+        response.getWriter().println("done");
     }
 
     /**
