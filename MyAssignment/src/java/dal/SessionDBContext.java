@@ -39,8 +39,7 @@ public class SessionDBContext extends DBContext<Session> {
             stm.setDate(2, from);
             stm.setDate(3, to);
             ResultSet rs = stm.executeQuery();
-            while(rs.next())
-            {
+            while (rs.next()) {
                 Session session = new Session();
                 session.setId(rs.getInt("sesid"));
                 session.setDate(rs.getDate("date"));
@@ -48,33 +47,32 @@ public class SessionDBContext extends DBContext<Session> {
                 Room r = new Room();
                 r.setId(rs.getString("roomid"));
                 session.setRoom(r);
-                
+
                 Group g = new Group();
                 g.setId(rs.getInt("gid"));
                 g.setName(rs.getString("gname"));
                 session.setGroup(g);
-                
+
                 Subject sub = new Subject();
                 sub.setId(rs.getInt("subid"));
                 sub.setName(rs.getString("subname"));
                 g.setSubject(sub);
-                
+
                 TimeSlot time = new TimeSlot();
                 time.setId(rs.getInt("tid"));
                 time.setDescription(rs.getString("description"));
                 session.setTimeSlot(time);
-                
+
                 sessions.add(session);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sessions;
     }
-    
-    public Session getSessionByID(int sesid)
-    {
+
+    public Session getSessionByID(int sesid) {
         try {
             String sql = "SELECT  \n"
                     + "	ses.sesid,ses.[date],ses.[index],ses.isAtt,r.roomid,sub.subid,sub.subname,g.gid,g.gname,t.tid,t.[description]\n"
@@ -118,7 +116,7 @@ public class SessionDBContext extends DBContext<Session> {
         }
         return null;
     }
-    
+
     public void addAttendences(Session ses) {
         try {
             connection.setAutoCommit(false);
@@ -171,7 +169,7 @@ public class SessionDBContext extends DBContext<Session> {
             }
         }
     }
-    
+
     @Override
     public void insert(Session model) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -196,5 +194,96 @@ public class SessionDBContext extends DBContext<Session> {
     public ArrayList<Session> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+    public ArrayList<Session> getSessionsBySesID(int sesid) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        try {
+            String sql = "SELECT  ses.sesid,ses.[date],ses.[index],r.roomid,sub.subid,sub.subname,g.gid,g.gname,t.tid,t.[description]\n"
+                    + "                    FROM [Session] ses INNER JOIN [Group] g ON ses.gid = g.gid\n"
+                    + "                    							INNER JOIN [Subject] sub ON g.subid = sub.subid\n"
+                    + "                    						INNER JOIN Room r ON r.roomid = ses.rid\n"
+                    + "                    						INNER JOIN TimeSlot t ON ses.tid = t.tid\n"
+                    + "                    WHERE ses.iid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, sesid);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session session = new Session();
+                session.setId(rs.getInt("sesid"));
+                session.setDate(rs.getDate("date"));
+                session.setIndex(rs.getInt("index"));
+                Room r = new Room();
+                r.setId(rs.getString("roomid"));
+                session.setRoom(r);
+
+                Group g = new Group();
+                g.setId(rs.getInt("gid"));
+                g.setName(rs.getString("gname"));
+                session.setGroup(g);
+
+                Subject sub = new Subject();
+                sub.setId(rs.getInt("subid"));
+                sub.setName(rs.getString("subname"));
+                g.setSubject(sub);
+
+                TimeSlot time = new TimeSlot();
+                time.setId(rs.getInt("tid"));
+                time.setDescription(rs.getString("description"));
+                session.setTimeSlot(time);
+
+                sessions.add(session);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessions;
+    }
+    public ArrayList<Session> getSessionsByGroupID(int gid) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        try {
+            String sql = "SELECT  ses.sesid,ses.[date],ses.[index],r.roomid,sub.subid,sub.subname,g.gid,g.gname,t.tid,t.[description]\n"
+                    + "                    FROM [Session] ses INNER JOIN [Group] g ON ses.gid = g.gid\n"
+                    + "                    							INNER JOIN [Subject] sub ON g.subid = sub.subid\n"
+                    + "                    						INNER JOIN Room r ON r.roomid = ses.rid\n"
+                    + "                    						INNER JOIN TimeSlot t ON ses.tid = t.tid\n"
+                    + "                    WHERE g.gid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, gid);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session session = new Session();
+                session.setId(rs.getInt("sesid"));
+                session.setDate(rs.getDate("date"));
+                session.setIndex(rs.getInt("index"));
+                Room r = new Room();
+                r.setId(rs.getString("roomid"));
+                session.setRoom(r);
+
+                Group g = new Group();
+                g.setId(rs.getInt("gid"));
+                g.setName(rs.getString("gname"));
+                session.setGroup(g);
+
+                Subject sub = new Subject();
+                sub.setId(rs.getInt("subid"));
+                sub.setName(rs.getString("subname"));
+                g.setSubject(sub);
+
+                TimeSlot time = new TimeSlot();
+                time.setId(rs.getInt("tid"));
+                time.setDescription(rs.getString("description"));
+                session.setTimeSlot(time);
+
+                sessions.add(session);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessions;
+    }
+
 }

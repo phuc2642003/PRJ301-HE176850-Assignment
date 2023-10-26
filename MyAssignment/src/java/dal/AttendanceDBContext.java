@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Attendance;
+import model.Group;
 import model.Session;
 import model.Student;
 
@@ -83,5 +84,43 @@ public class AttendanceDBContext extends DBContext<Attendance> {
     public ArrayList<Attendance> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+    public ArrayList<Attendance> getAttendanceByGroupID(int gid)
+    {
+        ArrayList<Attendance> attendances= new ArrayList<>();
+        try {
+            String sql = "SELECT s.stuid,s.stuname,\n" +
+                    "	  ISNULL(a.status,0) as [status]\n" +
+                    "	  ,ISNULL(a.description,'') as [description],\n" +
+                    "	   ISNULL(a.att_datetime,GETDATE()) as att_datetime\n" +
+                    "	  FROM [Session] ses INNER JOIN [Group] g ON g.gid = ses.gid\n" +
+                    "									INNER JOIN Group_Student gs ON g.gid = gs.gid\n" +
+                    "									INNER JOIN Student s ON s.stuid = gs.stuid\n" +
+                    "									LEFT JOIN Attendance a ON a.sesid = ses.sesid AND s.stuid = a.stuid\n"
+                    + "	  WHERE g.gid = ?";
+            PreparedStatement stm= connection.prepareStatement(sql);
+            stm.setInt(1, gid);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next())
+            {
+                Attendance att = new Attendance();
+                Student s = new Student();
+                Session ses = new Session();
+                Group g= new Group();
+                g.setId(gid);
+                s.setId(rs.getInt("stuid"));
+                s.setName(rs.getString("stuname"));
+                att.setStudent(s);
+                ses.setGroup(g);
+                att.setSession(ses);
+                att.setStatus(rs.getBoolean("status"));
+                att.setDescription(rs.getString("description"));
+                att.setTime(rs.getTimestamp("att_datetime"));
+                attendances.add(att);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return attendances;
+    }
 }
