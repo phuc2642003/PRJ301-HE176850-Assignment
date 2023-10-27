@@ -162,67 +162,67 @@
         <hr>
         <h2> Take attendance </h2>
         <table>
-        <thead>
-            <tr>
-                <th rowspan="2">
-                    <span class="auto-style1"><strong>Year</strong></span>
+            <thead>
+                <tr>
+                    <th rowspan="2">
+                        <span class="auto-style1"><strong>Year</strong></span>
+                        <select>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option selected="selected" value="2023">2023</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    <br>
+                    Week
                     <select>
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option selected="selected" value="2023">2023</option>
-                        <option value="2024">2024</option>
+
+                        <option selected="selected" value="40">02/10 To 08/10</option>
+                        <option value="41">09/10 To 15/10</option>
+
                     </select>
-                <br>
-                Week
-                <select>
-
-                    <option selected="selected" value="40">02/10 To 08/10</option>
-                    <option value="41">09/10 To 15/10</option>
-
-                </select>
-                </th>
-                <th align="center">Mon</th>
-                <th align="center">Tue</th>
-                <th align="center">Wed</th>
-                <th align="center">Thu</th>
-                <th align="center">Fri</th>
-                <th align="center">Sat</th>
-                <th align="center">Sun</th>
-            </tr>
-        
-            <tr>
-                <c:forEach items="${requestScope.dates}" var="d">
-                    <th align="center">
-                        ${d}
                     </th>
-                </c:forEach>
-                    
-                
-            </tr>
-        </thead>
+                    <th align="center">Mon</th>
+                    <th align="center">Tue</th>
+                    <th align="center">Wed</th>
+                    <th align="center">Thu</th>
+                    <th align="center">Fri</th>
+                    <th align="center">Sat</th>
+                    <th align="center">Sun</th>
+                </tr>
+
+                <tr>
+                    <c:forEach items="${requestScope.dates}" var="d">
+                        <th align="center">
+                            ${d}
+                        </th>
+                    </c:forEach>
+
+
+                </tr>
+            </thead>
             <tbody>
                 
                 <c:forEach items="${requestScope.slots}" var="s" varStatus="loop">
-                <tr>
-                    <td>Slot ${s.id}<br>${s.description}</td>
-                    <c:forEach items="${requestScope.dates}" var="d">
-                        <td>
-                            <c:forEach items="${requestScope.sessions}" var="k">
-                                <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
-                                    <a href="att?id=${k.id}">
-                                        ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
-                                    </a>
-                                </c:if>
-                            </c:forEach>
-                        </td>
-                    </c:forEach>
-                </tr>
-            </c:forEach>
+                    <tr>
+                        <td>Slot ${s.id}<br>${s.description}</td>
+                        <c:forEach items="${requestScope.dates}" var="d">
+                            <td>
+                                <c:forEach items="${requestScope.sessions}" var="k">
+                                    <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
+                                        <a href="takeattendance?id=${k.id}">
+                                            ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
+                                        </a>
+                                    </c:if>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
                     
                     
             </tbody>
-    </table>
+        </table>
     </div>
 </body>
 </html>

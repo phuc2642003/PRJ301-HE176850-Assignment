@@ -49,9 +49,12 @@ public class ReportController extends HttpServlet {
         StudentDBContext stdb= new StudentDBContext();
         ArrayList<Student> students= stdb.getStudentByGroupID(gid);
         
+        ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
+        
         request.setAttribute("sessions", sessions);
         request.setAttribute("attendances", attendances);
         request.setAttribute("students", students);
+        request.setAttribute("percent", percentages);
         
         request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
         

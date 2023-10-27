@@ -146,6 +146,7 @@
         
         <hr>
         <h2 style="margin: 50px 0"> Take attendance/ ${requestScope.ses.group.name}/ ${requestScope.ses.group.subject.name}/Session no ${requestScope.ses.index}</h2>
+        
         <table class="table" id="id">
             <thead>
                 <tr>

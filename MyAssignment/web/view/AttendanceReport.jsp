@@ -4,6 +4,7 @@
     Author     : phuc2
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -146,14 +147,26 @@
                         <td>${i}</td>
                         <td>${st.id}</td>
                         <td>${st.name}</td>
-                        <td>0%</td>
+                        <c:if test="${requestScope.percent[i-1] > 20}">
+                            <td style="color:red"><fmt:formatNumber value="${percent[i-1]}" pattern="0.00"/>%</td>
+                        </c:if>
+                        <c:if test="${requestScope.percent[i-1] eq 20}">
+                            <td style="color:yellow"><fmt:formatNumber value="${percent[i-1]}" pattern="0.00"/>%</td>
+                        </c:if>
+                        <c:if test="${requestScope.percent[i-1] <20}">
+                            <td style="color:green"><fmt:formatNumber value="${percent[i-1]}" pattern="0.00"/>%</td>
+                        </c:if>
+                        
                         <c:forEach items="${requestScope.attendances}" var="a">
                             <c:if test="${a.student.name eq st.name}">
                                 <c:if test="${a.status}">
                                     <td style="color: green">${a.status?"attend":"absent"}</td>
                                 </c:if>
-                                <c:if test="${!a.status}">
+                                <c:if test="${!a.status and requestScope.sessions[i-1].isAtt}">
                                     <td style="color: red">${a.status?"attend":"absent"}</td>
+                                </c:if>
+                                <c:if test="${!a.status and !requestScope.sessions[i-1].isAtt}">
+                                    <td>-</td>
                                 </c:if>
                             </c:if>
                         </c:forEach>
