@@ -21,7 +21,7 @@
 
         #menu-container {
             position: fixed;
-            background-color: #ccc; /* Màu xám */
+            background-color: #FFA500;
             width: 20%;
             height: 100%;
             padding: 20px;
@@ -95,7 +95,7 @@
 </head>
 <body>
     <div id="menu-container">
-        <h2 style="color : white; text-align: center">FPT</h2>
+        <h2 style="text-align: center">FPT</h2>
         <hr>
         <p style='text-align: center'>Lecture's displayName</p>
         <hr>

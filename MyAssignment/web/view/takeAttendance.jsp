@@ -20,7 +20,7 @@
 
         #menu-container {
             position: fixed;
-            background-color: #ccc; /* Màu xám */
+            background-color: #FFA500;
             width: 20%;
             height: 100%;
             padding: 20px;
