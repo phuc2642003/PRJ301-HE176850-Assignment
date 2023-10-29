@@ -11,6 +11,15 @@ package model;
 public class Instructor implements IBaseModel {
     private int id;
     private String name;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getId() {
         return id;

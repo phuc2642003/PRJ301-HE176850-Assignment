@@ -136,11 +136,11 @@
         <hr>
            
         <ul>
-            <li>Home</li>
+            <li><a href="home">Home</a></li>
             <br>
             <li>Weekly timetable</li>
             <br>
-            <li>Class management</li>
+            <li><a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
             <br>
             <li>Mail</li>
             <br>
@@ -212,6 +212,12 @@
                                     <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
                                         <a href="takeattendance?id=${k.id}">
                                             ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
+                                            <c:if test="${k.isAtt}">
+                                                (attended)
+                                            </c:if>
+                                            <c:if test="${!k.isAtt}">
+                                                (not yet)
+                                            </c:if>
                                         </a>
                                     </c:if>
                                 </c:forEach>

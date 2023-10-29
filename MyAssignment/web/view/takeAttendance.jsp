@@ -125,7 +125,7 @@
             <br>
             <li>Weekly timetable</li>
             <br>
-            <li>Class management</li>
+            <li><a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
             <br>
             <li>Mail</li>
             <br>

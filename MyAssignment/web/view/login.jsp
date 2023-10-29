@@ -115,6 +115,8 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <p style="color: red">${requestScope.invalid}</p>
+            <input type="checkbox" name="remember" value="remember"/> Remember in this computer.
             <input type="submit" name="login" value="Login">
         </form>
         
