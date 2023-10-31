@@ -154,8 +154,8 @@
         <div id="header">
             <h2>Class management</h2>
             <div id="account">
-                <img style="border-radius: 50%" width="100px" src="img/333656871_922232512296780_115887774450775164_n.jpg">
                 <p>Account's name</p>
+                
             </div>
         </div>
         
@@ -165,11 +165,12 @@
             <thead>
                 <tr>
                     <th rowspan="2">
-                        <form action="timetable" method="GET">
+                        <form id="timetable" action="timetable" method="GET">
                             <input type="hidden" name="id" value="${param.id}"/>
-                            Week:<input type="week" id="weekInput" name="weekInput">
+                            Week:<input type="week" id="weekInput" name="weekInput" required
+                    onchange="document.getElementById('timetable').submit();">
                             <br>
-                            <input type="submit" value="View">
+                            
                         </form>
                     </th>
                     <th align="center">Mon</th>

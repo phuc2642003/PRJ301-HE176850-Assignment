@@ -90,18 +90,16 @@
     </head>
     <body>
         <div id="menu-container">
-            <h2 style="color : white; text-align: center">FPT</h2>
+            <img src="img/og-image.jpg" width="200px" alt="alt"/>
             <hr>
-            <p style='text-align: center'>Hello ${sessionScope.account.displayname}</p>
-            <hr>
-
+            
             <ul>
-                <li>Home</li>
+                <li><a href="home">Home</a></li>
                 <br>
                 <li>Weekly timetable</li>
                 <br>
                 <li>
-                    <a href="../timetable?id=${sessionScope.instructor.id}">Class management</a></li>
+                    <a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
                 <br>
                 <li>Mail</li>
                 <br>
@@ -115,8 +113,12 @@
             <div id="header">
                 <h2>FPT University Academic Portal</h2>
                 <div id="account">
-                    <img style="border-radius: 50%" width="100px" src="img/333656871_922232512296780_115887774450775164_n.jpg">
-                    <p>Account's name</p>
+                    <c:if test="${not empty sessionScope.account}">
+                        ${sessionScope.account.displayname}(<a href="logout">Logout</a>) 
+                    </c:if>
+                    <c:if test="${empty sessionScope.account}">
+                        You are not logged in (<a href="login">Login</a>)
+                    </c:if>
                 </div>
             </div>
                 <hr>

@@ -88,7 +88,7 @@ public class LoginController extends HttpServlet {
                 response.addCookie(c_pass);
             }
             session.setAttribute("instructor", i);
-            response.sendRedirect("view/Home.jsp");
+            response.sendRedirect("home");
             
         }
         else

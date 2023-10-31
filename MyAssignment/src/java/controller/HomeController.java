@@ -5,10 +5,6 @@
 
 package controller;
 
-import dal.AttendanceDBContext;
-import dal.GroupDBContext;
-import dal.SessionDBContext;
-import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,20 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import model.Attendance;
-import model.Group;
-import model.Instructor;
-import model.Session;
-import model.Student;
 
 /**
  *
  * @author phuc2
  */
-@WebServlet(name="ReportController", urlPatterns={"/report"})
-public class ReportController extends HttpServlet {
+@WebServlet(name="HomeController", urlPatterns={"/home"})
+public class HomeController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,34 +30,7 @@ public class ReportController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        int gid= Integer.parseInt(request.getParameter("id"));
-        
-        SessionDBContext sedb= new SessionDBContext();
-        ArrayList<Session> sessions= sedb.getSessionsByGroupID(gid);
-        
-        AttendanceDBContext adb= new AttendanceDBContext();
-        ArrayList<Attendance> attendances= adb.getAttendanceByGroupID(gid);
-        
-        StudentDBContext stdb= new StudentDBContext();
-        ArrayList<Student> students= stdb.getStudentByGroupID(gid);
-        
-        ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
-        
-        GroupDBContext gdb= new GroupDBContext();
-        HttpSession session= request.getSession();
-        Instructor i= (Instructor) session.getAttribute("instructor");
-        int iid= i.getId();
-        ArrayList<Group> groups= gdb.getByInstructorID(iid);
-        
-        request.setAttribute("sessions", sessions);
-        request.setAttribute("attendances", attendances);
-        request.setAttribute("students", students);
-        request.setAttribute("percent", percentages);
-        request.setAttribute("groups", groups);
-        
-        request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
-        
+        request.getRequestDispatcher("view/Home.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
