@@ -13,8 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import model.Attendance;
+import model.Instructor;
 import model.Session;
 import model.Student;
 
@@ -90,7 +92,11 @@ public class takeAttendanceController extends HttpServlet {
         }
         SessionDBContext sesDB = new SessionDBContext();
         sesDB.addAttendences(ses);
-        response.getWriter().println("done");
+        
+        HttpSession session= request.getSession();
+        Instructor instructor=(Instructor) session.getAttribute("instructor");
+        String week=(String) session.getAttribute("week");
+        response.sendRedirect("timetable?id="+instructor.getId()+"&weekInput="+week);
     }
 
     /**

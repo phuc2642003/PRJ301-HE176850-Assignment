@@ -165,22 +165,12 @@
             <thead>
                 <tr>
                     <th rowspan="2">
-                        <span class="auto-style1"><strong>Year</strong></span>
-                        <select>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option selected="selected" value="2023">2023</option>
-                            <option value="2024">2024</option>
-                        </select>
-                    <br>
-                    Week
-                    <select>
-
-                        <option selected="selected" value="40">02/10 To 08/10</option>
-                        <option value="41">09/10 To 15/10</option>
-
-                    </select>
+                        <form action="timetable" method="GET">
+                            <input type="hidden" name="id" value="${param.id}"/>
+                            Week:<input type="week" id="weekInput" name="weekInput">
+                            <br>
+                            <input type="submit" value="View">
+                        </form>
                     </th>
                     <th align="center">Mon</th>
                     <th align="center">Tue</th>

@@ -13,11 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Instructor;
 import model.Session;
 import model.TimeSlot;
 import ulti.DateUtils;
@@ -42,38 +44,49 @@ public class TimeTableController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int id = Integer.parseInt(request.getParameter("id"));
-        String s_from = request.getParameter("from");
-        String s_to = request.getParameter("to");
-        ArrayList<Date> dates = new ArrayList<>();
-        if(s_from ==null)// this week
+        HttpSession session= request.getSession();
+        Instructor i =(Instructor) session.getAttribute("instructor");
+        if(i==null)
         {
-            dates = (ArrayList<Date>) DateUtils.getDatesOfCurrentWeek();
+            response.sendRedirect("login");
         }
         else
         {
-            try {
-                dates = (ArrayList<Date>) getSQLDatesBetween(s_from,s_to);
-            } catch (ParseException ex) {
-                Logger.getLogger(TimeTableController.class.getName()).log(Level.SEVERE, null, ex);
+            int id = Integer.parseInt(request.getParameter("id"));
+            String week = request.getParameter("weekInput");
+            String s_from = DateUtils.getFirstDayOfWeek(week);
+            String s_to = DateUtils.getLastDayOfWeek(week);
+            ArrayList<Date> dates = new ArrayList<>();
+            if(s_from ==null)// this week
+            {
+                dates = (ArrayList<Date>) DateUtils.getDatesOfCurrentWeek();
             }
+            else
+            {
+                try {
+                    dates = (ArrayList<Date>) getSQLDatesBetween(s_from,s_to);
+                } catch (ParseException ex) {
+                    Logger.getLogger(TimeTableController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            Date from = dates.get(0);
+            Date to = dates.get(dates.size()-1);
+
+            TimeSlotDBContext timeDB = new TimeSlotDBContext();
+            ArrayList<TimeSlot> slots = timeDB.list();
+
+            SessionDBContext sesDB = new SessionDBContext();
+            ArrayList<Session> sessions = sesDB.getSessions(id, from, to);
+
+            request.setAttribute("slots", slots);
+            request.setAttribute("dates", dates);
+            request.setAttribute("from", from);
+            request.setAttribute("to", to);
+            request.setAttribute("sessions", sessions);
+            session.setAttribute("week", week);
+            request.getRequestDispatcher("view/timeTable.jsp").forward(request, response);
         }
-        Date from = dates.get(0);
-        Date to = dates.get(dates.size()-1);
         
-        TimeSlotDBContext timeDB = new TimeSlotDBContext();
-        ArrayList<TimeSlot> slots = timeDB.list();
-        
-        SessionDBContext sesDB = new SessionDBContext();
-        ArrayList<Session> sessions = sesDB.getSessions(id, from, to);
-        
-        request.setAttribute("slots", slots);
-        request.setAttribute("dates", dates);
-        request.setAttribute("from", from);
-        request.setAttribute("to", to);
-        request.setAttribute("sessions", sessions);
-        
-        request.getRequestDispatcher("view/timeTable.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

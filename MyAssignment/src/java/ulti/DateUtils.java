@@ -7,6 +7,9 @@ package ulti;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -66,5 +69,50 @@ public class DateUtils {
         }
 
         return dates;
+    }
+
+    public static String getFirstDayOfWeek(String weekValue) {
+        // Split the week value into year and week number
+        if(weekValue!=null)
+        {
+            String[] parts = weekValue.split("-W");
+            int year = Integer.parseInt(parts[0]);
+            int weekNumber = Integer.parseInt(parts[1]);
+
+            // Calculate the first and last days of the selected week
+            LocalDate firstDay = LocalDate.of(year, 1, 1)
+                    .with(DayOfWeek.MONDAY)            // Set to Monday
+                    .plusWeeks(weekNumber);         // Adjust to the selected week
+            // Format the dates as strings (e.g., "yyyy-MM-dd")
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String firstDayStr = firstDay.format(dateFormat);
+
+            return firstDayStr;
+        }
+        return null;
+        
+    }
+    public static String getLastDayOfWeek(String weekValue) {
+        // Split the week value into year and week number
+        if(weekValue!=null)
+        {
+            String[] parts = weekValue.split("-W");
+            int year = Integer.parseInt(parts[0]);
+            int weekNumber = Integer.parseInt(parts[1]);
+
+            // Calculate the first and last days of the selected week
+            LocalDate firstDay = LocalDate.of(year, 1, 1)
+                    .with(DayOfWeek.MONDAY)            // Set to Monday
+                    .plusWeeks(weekNumber);         // Adjust to the selected week
+
+            LocalDate lastDay = firstDay.plusDays(6);  // Calculate the last day (Sunday)
+
+            // Format the dates as strings (e.g., "yyyy-MM-dd")
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String lastDayStr = lastDay.format(dateFormat);
+            return lastDayStr;
+        }
+        return null;
+        
     }
 }
