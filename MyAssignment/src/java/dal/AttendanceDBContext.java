@@ -128,7 +128,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
         for (Student stu : students) {
             int absent = 0;
             for (Attendance att : attendances) {
-                if (stu.getName().equals(att.getStudent().getName())) {
+                if (stu.getId()==att.getStudent().getId()) {
                     if (!att.isStatus() && att.getSession().isIsAtt()) {
                         absent++;
                     }

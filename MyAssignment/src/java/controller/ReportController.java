@@ -42,32 +42,49 @@ public class ReportController extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        int gid= Integer.parseInt(request.getParameter("id"));
-        
-        SessionDBContext sedb= new SessionDBContext();
-        ArrayList<Session> sessions= sedb.getSessionsByGroupID(gid);
-        
-        AttendanceDBContext adb= new AttendanceDBContext();
-        ArrayList<Attendance> attendances= adb.getAttendanceByGroupID(gid);
-        
-        StudentDBContext stdb= new StudentDBContext();
-        ArrayList<Student> students= stdb.getStudentByGroupID(gid);
-        
-        ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
-        
         GroupDBContext gdb= new GroupDBContext();
         HttpSession session= request.getSession();
         Instructor i= (Instructor) session.getAttribute("instructor");
-        int iid= i.getId();
-        ArrayList<Group> groups= gdb.getByInstructorID(iid);
+        if(i==null)
+        {
+            response.sendRedirect("login");
+        }
+        else
+        {
+            int iid= i.getId();
+            ArrayList<Group> groups= gdb.getByInstructorID(iid);
+            request.setAttribute("groups", groups);
+
+            if(request.getParameter("id")==null)
+            {
+                request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
+            }
+            else
+            {
+                int gid= Integer.parseInt(request.getParameter("id"));
+
+                SessionDBContext sedb= new SessionDBContext();
+                ArrayList<Session> sessions= sedb.getSessionsByGroupID(gid);
+
+                AttendanceDBContext adb= new AttendanceDBContext();
+                ArrayList<Attendance> attendances= adb.getAttendanceByGroupID(gid);
+
+                StudentDBContext stdb= new StudentDBContext();
+                ArrayList<Student> students= stdb.getStudentByGroupID(gid);
+
+                ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
+
+                request.setAttribute("sessions", sessions);
+                request.setAttribute("attendances", attendances);
+                request.setAttribute("students", students);
+                request.setAttribute("percent", percentages);
+
+
+                request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
+            }
         
-        request.setAttribute("sessions", sessions);
-        request.setAttribute("attendances", attendances);
-        request.setAttribute("students", students);
-        request.setAttribute("percent", percentages);
-        request.setAttribute("groups", groups);
+        }
         
-        request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
         
     } 
 

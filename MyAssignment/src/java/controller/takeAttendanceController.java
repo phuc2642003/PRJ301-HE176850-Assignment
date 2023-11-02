@@ -54,16 +54,27 @@ public class takeAttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SessionDBContext db = new SessionDBContext();
-        int id = Integer.parseInt(request.getParameter("id"));
-        Session ses = db.getSessionByID(id);
-        request.setAttribute("ses",ses);
+        HttpSession session= request.getSession();
+        Instructor i =(Instructor) session.getAttribute("instructor");
+        if(i==null)
+        {
+            response.sendRedirect("login");
+        }
+        else
+        {
+            SessionDBContext db = new SessionDBContext();
+            int id = Integer.parseInt(request.getParameter("id"));
+            Session ses = db.getSessionByID(id);
+            request.setAttribute("ses",ses);
+
+            AttendanceDBContext attDb = new AttendanceDBContext();
+            ArrayList<Attendance> atts = attDb.getAttendanceBySession(id);
+
+            request.setAttribute("atts", atts);
+            request.getRequestDispatcher("view/takeAttendance.jsp").forward(request, response);
+        }
         
-        AttendanceDBContext attDb = new AttendanceDBContext();
-        ArrayList<Attendance> atts = attDb.getAttendanceBySession(id);
         
-        request.setAttribute("atts", atts);
-        request.getRequestDispatcher("view/takeAttendance.jsp").forward(request, response);
     }
 
     /**

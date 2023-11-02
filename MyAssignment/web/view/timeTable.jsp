@@ -15,6 +15,7 @@
         body {
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
             display: flex;
         }
 
@@ -30,7 +31,7 @@
 
         #content {
             width: 80%;
-            padding: 20px;
+            
             box-sizing: border-box;
             margin-left: 20%; /* Tạo khoảng cách giữa menu và nội dung chính */
         }
@@ -61,13 +62,13 @@
         /* Style for table headers in the first row */
         th {
             text-align: center;
-            background-color: #f2f2f2;
+            background-color: #45a049;
         }
 
         /* Style for table headers in the second row */
         th:nth-child(n+2) {
             text-align: center;
-            background-color: #f2f2f2;
+            background-color: #45a049;
         }
 
         /* Style for table cells */
@@ -117,6 +118,10 @@
             display: flex;
             align-items: center; /* Căn giữa theo chiều dọc */
             justify-content: space-between; /* Căn cách hai phần tử */
+            padding:20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 30px;
         }
         #account{
             display: flex;
@@ -124,23 +129,30 @@
             cursor: pointer; /* Biến con trỏ thành bàn tay khi di chuột qua */
             transition: background-color 0.3s;
         }
+        #main-content{
+            background-color: #fff;
+            padding:10px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin: 0 20px;
+        }
         
 
     </style>
 </head>
 <body>
     <div id="menu-container">
-        <h2 style="color : white; text-align: center">FPT</h2>
-        <hr>
-        <p style='text-align: center'>Lecture's displayName</p>
+        <img style="align-content: center" src="img/og-image.jpg" width="200px" alt="alt"/>
         <hr>
            
         <ul>
             <li><a href="home">Home</a></li>
             <br>
-            <li>Weekly timetable</li>
+            <li>
+                <a href="timetable?id=${sessionScope.instructor.id}">Weekly timetable</a></li>
             <br>
-            <li><a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
+            <li><a href="report"> Attendance Report</a></li>
             <br>
             <li>Mail</li>
             <br>
@@ -152,74 +164,81 @@
     </div>
     <div id="content">
         <div id="header">
-            <h2>Class management</h2>
+            <h2>FPT University Academic Portal</h2>
             <div id="account">
-                <p>Account's name</p>
-                
+                <c:if test="${not empty sessionScope.account}">
+                    ${sessionScope.account.displayname}(<a href="logout">Logout</a>) 
+                </c:if>
+                <c:if test="${empty sessionScope.account}">
+                    You are not logged in (<a href="login">Login</a>)
+                </c:if>
             </div>
         </div>
         
-        <hr>
-        <h2> Take attendance </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2">
-                        <form id="timetable" action="timetable" method="GET">
-                            <input type="hidden" name="id" value="${param.id}"/>
-                            Week:<input type="week" id="weekInput" name="weekInput" required
-                    onchange="document.getElementById('timetable').submit();">
-                            <br>
-                            
-                        </form>
-                    </th>
-                    <th align="center">Mon</th>
-                    <th align="center">Tue</th>
-                    <th align="center">Wed</th>
-                    <th align="center">Thu</th>
-                    <th align="center">Fri</th>
-                    <th align="center">Sat</th>
-                    <th align="center">Sun</th>
-                </tr>
+        <div id="main-content">
+            
+            <h2> Weekly Timetable </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <form id="timetable" action="timetable" method="GET">
+                                <input type="hidden" name="id" value="${param.id}"/>
+                                Week:<input type="week" id="weekInput" name="weekInput" required
+                        onchange="document.getElementById('timetable').submit();">
+                                <br>
 
-                <tr>
-                    <c:forEach items="${requestScope.dates}" var="d">
-                        <th align="center">
-                            ${d}
+                            </form>
                         </th>
+                        <th align="center">Mon</th>
+                        <th align="center">Tue</th>
+                        <th align="center">Wed</th>
+                        <th align="center">Thu</th>
+                        <th align="center">Fri</th>
+                        <th align="center">Sat</th>
+                        <th align="center">Sun</th>
+                    </tr>
+
+                    <tr>
+                        <c:forEach items="${requestScope.dates}" var="d">
+                            <th align="center">
+                                ${d}
+                            </th>
+                        </c:forEach>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <c:forEach items="${requestScope.slots}" var="s" varStatus="loop">
+                        <tr>
+                            <td>Slot ${s.id}<br>${s.description}</td>
+                            <c:forEach items="${requestScope.dates}" var="d">
+                                <td>
+                                    <c:forEach items="${requestScope.sessions}" var="k">
+                                        <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
+                                            <a href="takeattendance?id=${k.id}">
+                                                ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
+                                                <c:if test="${k.isAtt}">
+                                                    (attended)
+                                                </c:if>
+                                                <c:if test="${!k.isAtt}">
+                                                    (not yet)
+                                                </c:if>
+                                            </a>
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+                            </c:forEach>
+                        </tr>
                     </c:forEach>
 
 
-                </tr>
-            </thead>
-            <tbody>
-                
-                <c:forEach items="${requestScope.slots}" var="s" varStatus="loop">
-                    <tr>
-                        <td>Slot ${s.id}<br>${s.description}</td>
-                        <c:forEach items="${requestScope.dates}" var="d">
-                            <td>
-                                <c:forEach items="${requestScope.sessions}" var="k">
-                                    <c:if test="${k.date eq d and k.timeSlot.id eq s.id}">
-                                        <a href="takeattendance?id=${k.id}">
-                                            ${k.group.name}<br>${k.group.subject.name}<br>${k.room.id}
-                                            <c:if test="${k.isAtt}">
-                                                (attended)
-                                            </c:if>
-                                            <c:if test="${!k.isAtt}">
-                                                (not yet)
-                                            </c:if>
-                                        </a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </c:forEach>
-                    </tr>
-                </c:forEach>
-                    
-                    
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            
+        </div>
     </div>
 </body>
 </html>

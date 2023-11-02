@@ -15,6 +15,7 @@
         body {
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
             display: flex;
         }
 
@@ -30,7 +31,7 @@
 
         #content {
             width: 80%;
-            padding: 20px;
+            
             box-sizing: border-box;
             margin-left: 20%; /* Tạo khoảng cách giữa menu và nội dung chính */
         }
@@ -68,7 +69,7 @@
 
            /* Style the table header (thead) */
            .table thead {
-               background-color: #333;
+               background-color: #45a049;
                color: #fff;
            }
 
@@ -102,6 +103,10 @@
             display: flex;
             align-items: center; /* Căn giữa theo chiều dọc */
             justify-content: space-between; /* Căn cách hai phần tử */
+            padding:20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 30px;
         }
         #account{
             display: flex;
@@ -109,23 +114,45 @@
             cursor: pointer; /* Biến con trỏ thành bàn tay khi di chuột qua */
             transition: background-color 0.3s;
         }
-        
+        #main-content{
+            background-color: #fff;
+            padding:10px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin: 0 20px;
+        }
+        .cool-button {
+            background-color: #0077FF;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 48%;
+            margin-top: 10px;
+          }
+
+          /* Add a hover effect for the button */
+          .cool-button:hover {
+            background-color: #0055CC;
+          }
 
     </style>
 </head>
 <body>
     <div id="menu-container">
-        <h2 style="color : white; text-align: center">FPT</h2>
-        <hr>
-        <p style='text-align: center'>Lecture's displayName</p>
+        <img src="img/og-image.jpg" width="200px" alt="alt"/>
         <hr>
            
         <ul>
             <li><a href="home">Home</a></li>
             <br>
-            <li>Weekly timetable</li>
+            <li>
+                <a href="timetable?id=${sessionScope.instructor.id}">Weekly timetable</a></li>
             <br>
-            <li><a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
+            <li><a href="report"> Attendance Report</a></li>
             <br>
             <li>Mail</li>
             <br>
@@ -137,7 +164,7 @@
     </div>
     <div id="content">
         <div id="header">
-            <h2>Class management</h2>
+            <h2>FPT University Academic Portal</h2>
             <div id="account">
                 <c:if test="${not empty sessionScope.account}">
                     ${sessionScope.account.displayname}(<a href="logout">Logout</a>) 
@@ -148,56 +175,59 @@
             </div>
         </div>
         
-        <hr>
-        <h2 style="margin: 50px 0"> Take attendance/ ${requestScope.ses.group.name}/ ${requestScope.ses.group.subject.name}/Session no ${requestScope.ses.index}</h2>   
-        <form action="takeattendance" method="POST">
-            <table class="table" id="id">
-                <thead>
-                    <tr>
-                    <th>No</th>
-                    <th>Image</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Take attendance</th>
-                    <th>Comment</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${requestScope.atts}" var="a">
-                        <c:set var="i" value="${i+1}"/>
+        
+        <div id="main-content">
+            <h2 style="margin: 50px 0"> Take attendance/ ${requestScope.ses.group.name}/ ${requestScope.ses.group.subject.name}/Session no ${requestScope.ses.index}</h2>   
+            <form action="takeattendance" method="POST">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>${i}</td>
-                            <td>
-                                <center>
-                                    <img src="" style="height:146px;width:111px;border-width:0px;">
-                                </center>
-                            </td>
-                            <td>${a.student.id}</td>
-                            <td>${a.student.name}
-                                <input type="hidden" name="stuid" value="${a.student.id}"/>
-                            </td>
-                            <td><input type="radio"
-                                       <c:if test="${a.status}">
-                                           checked="checked"
-                                       </c:if>
-                                       name="status${a.student.id}" value="attend" />Attend
-                                <input type="radio" 
-                                       <c:if test="${!a.status}">
-                                           checked="checked"
-                                       </c:if>
-                                       name="status${a.student.id}" value="absent" />Absent</td>
-                            <td>
-                                <input type="text" value="${a.description}" name="description${a.student.id}" >
-                            </td>
-                        </tr>
-                    </c:forEach>
+                        <th>No</th>
+                        <th>Image</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Take attendance</th>
+                        <th>Comment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${requestScope.atts}" var="a">
+                            <c:set var="i" value="${i+1}"/>
+                            <tr>
+                                <td>${i}</td>
+                                <td>
+                                    <center>
+                                        <img src="" style="height:146px;width:111px;border-width:0px;">
+                                    </center>
+                                </td>
+                                <td>${a.student.id}</td>
+                                <td>${a.student.name}
+                                    <input type="hidden" name="stuid" value="${a.student.id}"/>
+                                </td>
+                                <td><input type="radio"
+                                           <c:if test="${a.status}">
+                                               checked="checked"
+                                           </c:if>
+                                           name="status${a.student.id}" value="present" />Attend
+                                    <input type="radio" 
+                                           <c:if test="${!a.status}">
+                                               checked="checked"
+                                           </c:if>
+                                           name="status${a.student.id}" value="absent" />Absent</td>
+                                <td>
+                                    <input type="text" value="${a.description}" name="description${a.student.id}" >
+                                </td>
+                            </tr>
+                        </c:forEach>
 
-                </tbody>
+                    </tbody>
 
-            </table>
-            <input type="hidden" value="${requestScope.ses.id}" name="sesid"/>
-            <input type="submit" value="Save"/>
-        </form>
+                </table>
+                <input type="hidden" value="${requestScope.ses.id}" name="sesid"/>
+                <input type="submit" value="Save" class="cool-button"/>
+            </form>
+        </div>
+        
     </div>
 </body>
 </html>

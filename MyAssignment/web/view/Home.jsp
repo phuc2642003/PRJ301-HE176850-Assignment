@@ -21,14 +21,14 @@
                 background-color: #FFA500;
                 width: 20%;
                 height: 100%;
-                padding: 20px;
+                padding: 20px;  
                 box-sizing: border-box;
                 overflow-y: auto; /* Cho phép menu cuộn khi nội dung dài hơn */
             }
 
             #content {
                 width: 80%;
-                padding: 20px;
+               
                 box-sizing: border-box;
                 margin-left: 20%; /* Tạo khoảng cách giữa menu và nội dung chính */
             }
@@ -78,6 +78,9 @@
                 display: flex;
                 align-items: center; /* Căn giữa theo chiều dọc */
                 justify-content: space-between; /* Căn cách hai phần tử */
+                padding:20px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
             }
             #account{
                 display: flex;
@@ -85,7 +88,7 @@
                 cursor: pointer; /* Biến con trỏ thành bàn tay khi di chuột qua */
                 transition: background-color 0.3s;
             }
-
+            
         </style>
     </head>
     <body>
@@ -96,10 +99,10 @@
             <ul>
                 <li><a href="home">Home</a></li>
                 <br>
-                <li>Weekly timetable</li>
-                <br>
                 <li>
-                    <a href="timetable?id=${sessionScope.instructor.id}">Class management</a></li>
+                    <a href="timetable?id=${sessionScope.instructor.id}">Weekly timetable</a></li>
+                <br>
+                <li><a href="report"> Attendance Report</a></li>
                 <br>
                 <li>Mail</li>
                 <br>
@@ -121,7 +124,10 @@
                     </c:if>
                 </div>
             </div>
-                <hr>
+           
+            <div id="main-content">
+                <img src="img/DH-FPT-4359-1612093890.jpg">
+            </div>
         </div>
     </body>
 </html>
