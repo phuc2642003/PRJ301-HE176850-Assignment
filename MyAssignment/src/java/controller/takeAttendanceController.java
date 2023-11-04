@@ -27,6 +27,17 @@ import model.Student;
 @WebServlet(name = "takeAttendanceController", urlPatterns = {"/takeattendance"})
 public class takeAttendanceController extends HttpServlet {
 
+    protected boolean checkAuthorization(int sesid ,ArrayList<Session> sesList)
+    {
+        for(Session ses:sesList)
+        {
+            if(sesid==ses.getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,17 +75,23 @@ public class takeAttendanceController extends HttpServlet {
         {
             SessionDBContext db = new SessionDBContext();
             int id = Integer.parseInt(request.getParameter("id"));
-            Session ses = db.getSessionByID(id);
-            request.setAttribute("ses",ses);
+            ArrayList<Session> sesList= db.getSessionsByInstructorID(i.getId());
+            if(!checkAuthorization(id, sesList))
+            {
+                request.getRequestDispatcher("view/accessdenied.jsp").forward(request, response);
+            }
+            else
+            {
+                Session ses = db.getSessionByID(id);
+                request.setAttribute("ses",ses);
 
-            AttendanceDBContext attDb = new AttendanceDBContext();
-            ArrayList<Attendance> atts = attDb.getAttendanceBySession(id);
+                AttendanceDBContext attDb = new AttendanceDBContext();
+                ArrayList<Attendance> atts = attDb.getAttendanceBySession(id);
 
-            request.setAttribute("atts", atts);
-            request.getRequestDispatcher("view/takeAttendance.jsp").forward(request, response);
+                request.setAttribute("atts", atts);
+                request.getRequestDispatcher("view/takeAttendance.jsp").forward(request, response); 
+            }
         }
-        
-        
     }
 
     /**
@@ -107,7 +124,15 @@ public class takeAttendanceController extends HttpServlet {
         HttpSession session= request.getSession();
         Instructor instructor=(Instructor) session.getAttribute("instructor");
         String week=(String) session.getAttribute("week");
-        response.sendRedirect("timetable?id="+instructor.getId()+"&weekInput="+week);
+        if(week==null)
+        {
+            response.sendRedirect("timetable?id="+instructor.getId());
+        }
+        else
+        {
+            response.sendRedirect("timetable?id="+instructor.getId()+"&weekInput="+week);
+        }
+        
     }
 
     /**

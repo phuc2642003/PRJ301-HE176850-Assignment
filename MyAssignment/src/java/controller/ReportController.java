@@ -31,6 +31,17 @@ import model.Student;
 @WebServlet(name="ReportController", urlPatterns={"/report"})
 public class ReportController extends HttpServlet {
    
+    protected boolean checkAuthorization(int gid ,ArrayList<Group> gList)
+    {
+        for(Group g:gList)
+        {
+            if(gid==g.getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -62,27 +73,31 @@ public class ReportController extends HttpServlet {
             else
             {
                 int gid= Integer.parseInt(request.getParameter("id"));
+                if(!checkAuthorization(gid, groups))
+                {
+                    request.getRequestDispatcher("view/accessdenied.jsp").forward(request, response);
+                }
+                else
+                {
+                    SessionDBContext sedb= new SessionDBContext();
+                    ArrayList<Session> sessions= sedb.getSessionsByGroupID(gid);
 
-                SessionDBContext sedb= new SessionDBContext();
-                ArrayList<Session> sessions= sedb.getSessionsByGroupID(gid);
+                    AttendanceDBContext adb= new AttendanceDBContext();
+                    ArrayList<Attendance> attendances= adb.getAttendanceByGroupID(gid);
 
-                AttendanceDBContext adb= new AttendanceDBContext();
-                ArrayList<Attendance> attendances= adb.getAttendanceByGroupID(gid);
+                    StudentDBContext stdb= new StudentDBContext();
+                    ArrayList<Student> students= stdb.getStudentByGroupID(gid);
 
-                StudentDBContext stdb= new StudentDBContext();
-                ArrayList<Student> students= stdb.getStudentByGroupID(gid);
+                    ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
 
-                ArrayList<Float> percentages= adb.absentPercentage(students, attendances, sessions);
+                    request.setAttribute("sessions", sessions);
+                    request.setAttribute("attendances", attendances);
+                    request.setAttribute("students", students);
+                    request.setAttribute("percent", percentages);
 
-                request.setAttribute("sessions", sessions);
-                request.setAttribute("attendances", attendances);
-                request.setAttribute("students", students);
-                request.setAttribute("percent", percentages);
-
-
-                request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
-            }
-        
+                    request.getRequestDispatcher("view/AttendanceReport.jsp").forward(request, response);
+                }               
+            }      
         }
         
         

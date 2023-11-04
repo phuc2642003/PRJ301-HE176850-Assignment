@@ -1,8 +1,9 @@
 <%-- 
-    Document   : Home
-    Created on : Oct 28, 2023, 5:11:45 PM
+    Document   : accessdenied
+    Created on : Nov 4, 2023, 10:44:18 PM
     Author     : phuc2
 --%>
+
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -128,7 +129,7 @@
             </div>
            
             <div id="main-content">
-                <img src="img/DH-FPT-4359-1612093890.jpg">
+                <h1 style="margin: 15px">Access Denied!!!</h1>
             </div>
         </div>
     </body>

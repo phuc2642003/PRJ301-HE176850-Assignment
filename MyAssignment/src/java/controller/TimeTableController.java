@@ -53,38 +53,46 @@ public class TimeTableController extends HttpServlet {
         else
         {
             int id = Integer.parseInt(request.getParameter("id"));
-            String week = request.getParameter("weekInput");
-            String s_from = DateUtils.getFirstDayOfWeek(week);
-            String s_to = DateUtils.getLastDayOfWeek(week);
-            ArrayList<Date> dates = new ArrayList<>();
-            if(s_from ==null)// this week
+            if(id!=i.getId())
             {
-                dates = (ArrayList<Date>) DateUtils.getDatesOfCurrentWeek();
+                request.getRequestDispatcher("view/accessdenied.jsp").forward(request, response);
             }
             else
             {
-                try {
-                    dates = (ArrayList<Date>) getSQLDatesBetween(s_from,s_to);
-                } catch (ParseException ex) {
-                    Logger.getLogger(TimeTableController.class.getName()).log(Level.SEVERE, null, ex);
+                String week = request.getParameter("weekInput");
+                String s_from = DateUtils.getFirstDayOfWeek(week);
+                String s_to = DateUtils.getLastDayOfWeek(week);
+                ArrayList<Date> dates = new ArrayList<>();
+                if(s_from ==null)// this week
+                {
+                    dates = (ArrayList<Date>) DateUtils.getDatesOfCurrentWeek();
                 }
+                else
+                {
+                    try {
+                        dates = (ArrayList<Date>) getSQLDatesBetween(s_from,s_to);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(TimeTableController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                Date from = dates.get(0);
+                Date to = dates.get(dates.size()-1);
+
+                TimeSlotDBContext timeDB = new TimeSlotDBContext();
+                ArrayList<TimeSlot> slots = timeDB.list();
+
+                SessionDBContext sesDB = new SessionDBContext();
+                ArrayList<Session> sessions = sesDB.getSessions(id, from, to);
+
+                request.setAttribute("slots", slots);
+                request.setAttribute("dates", dates);
+                request.setAttribute("from", from);
+                request.setAttribute("to", to);
+                request.setAttribute("sessions", sessions);
+                session.setAttribute("week", week);
+                request.getRequestDispatcher("view/timeTable.jsp").forward(request, response);
             }
-            Date from = dates.get(0);
-            Date to = dates.get(dates.size()-1);
-
-            TimeSlotDBContext timeDB = new TimeSlotDBContext();
-            ArrayList<TimeSlot> slots = timeDB.list();
-
-            SessionDBContext sesDB = new SessionDBContext();
-            ArrayList<Session> sessions = sesDB.getSessions(id, from, to);
-
-            request.setAttribute("slots", slots);
-            request.setAttribute("dates", dates);
-            request.setAttribute("from", from);
-            request.setAttribute("to", to);
-            request.setAttribute("sessions", sessions);
-            session.setAttribute("week", week);
-            request.getRequestDispatcher("view/timeTable.jsp").forward(request, response);
+            
         }
         
     }

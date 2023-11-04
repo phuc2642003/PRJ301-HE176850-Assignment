@@ -108,7 +108,9 @@
 </head>
 <body>
     <div id="menu-container">
-        <img src="img/og-image.jpg" width="200px" alt="alt"/>
+        <a href="home">
+                <img src="img/og-image.jpg" width="200px" alt="alt"/>
+            </a>
         <hr>
         <ul>
             <li><a href="home">Home</a></li>
@@ -151,8 +153,7 @@
             
             <form id="selectgroup" action="report" method="get">
                 Select group:
-                <select id="groupid" name="id" required
-                        onchange="document.getElementById('selectgroup').submit();">
+                <select id="groupid" name="id" required>
                     <c:forEach items="${requestScope.groups}" var="g">
                         <option
                             <c:if test="${g.id eq param.id}">

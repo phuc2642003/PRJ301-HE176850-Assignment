@@ -143,7 +143,9 @@
 </head>
 <body>
     <div id="menu-container">
-        <img src="img/og-image.jpg" width="200px" alt="alt"/>
+        <a href="home">
+                <img src="img/og-image.jpg" width="200px" alt="alt"/>
+            </a>
         <hr>
            
         <ul>
